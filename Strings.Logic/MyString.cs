@@ -1,40 +1,78 @@
 ﻿namespace Strings.Logic
 {
-    public class MyString
+    public class TheMostResistantBeam
     {
-        private readonly string _text;
+        private static string _beam = "";
 
-        public MyString(string text)
+        public TheMostResistantBeam(string text)
         {
-            _text = text;
+
+            _beam = text;
         }
 
-        public bool IsPalindrome()
+        public string validBeam()
         {
-            string aux2 = _text.ToLower();
-            aux2 = aux2.Replace('á', 'a');
-            aux2 = aux2.Replace('é', 'e');
-            aux2 = aux2.Replace('í', 'i');
-            aux2 = aux2.Replace('ó', 'o');
-            aux2 = aux2.Replace('ú', 'u');
-            string aux = string.Empty;
-            for (int i = 0; i < aux2.Length; i++)
+            int baseInit = getBase();
+            int sumTotal = 0;
+            int countL = 1;
+            string response;
+            if(baseInit == 0)
             {
-                if (!(aux2[i] == ' ' || aux2[i] == '.' || aux2[i] == ',' || aux2[i] == '¿' || aux2[i] == '?' || aux2[i] == '¡' || aux2[i] == '!' || aux2[i] == '\'' || aux2[i] == '"'))
+                return "Base no valida";
+            }
+            for(int i = 0;i < _beam.Length; i++) {
+                char currentChar = _beam[i];
+                char nextChar = ' ';
+                if(i+1 < _beam.Length) {
+                    
+                    nextChar = _beam[i + 1];
+                }
+                if(currentChar == '*' & nextChar == '*')
                 {
-                    aux += aux2[i];
+                    return "La viga esta mal construida!";
+                }
+                if (currentChar == '=') {
+                    sumTotal += countL;
+                    countL++;
+                }
+                if(currentChar == '*')
+                {
+                    sumTotal *= 2;
+                    countL = 1;
                 }
             }
 
-            int n = aux.Length / 2;
-            for (int i = 0; i < n; i++)
+            if(sumTotal > baseInit)
             {
-                if (aux[i] != aux[aux.Length - i - 1])
-                {
-                    return false;
-                }
+                response = "La viga NO soporta el peso!";
             }
-            return true;
+            else
+            {
+                response = "La viga soporta el peso!";
+            }            
+
+            return response;
         }
+
+        public static int getBase() {
+            string firstChard = _beam.Substring(0, 1);
+            int valueBase = 0;
+            switch (firstChard)
+            {
+                case "#":
+                    valueBase = 90;
+                    break;
+                case "%":
+                    valueBase = 10;
+                    break;
+                case "&":
+                    valueBase = 30;
+                    break;
+                default: return valueBase;
+            }
+            return valueBase;
+        }
+
+        
     }
 }
